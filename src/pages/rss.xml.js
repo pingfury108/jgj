@@ -3,7 +3,8 @@ import dayjs from "dayjs";
 import astropodConfig from "../../.astropod/astropod.config.json";
 import { getCollection } from "astro:content";
 let episode = await getCollection("episode");
-episode.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+episode.sort((a, b) => a.data.index - b.data.index);
+
 if (astropodConfig.feedSize) episode = episode.slice(0, astropodConfig.feedSize);
 
 import { marked } from "marked";
@@ -83,7 +84,7 @@ export async function get(context) {
 
   const items = episode.map((episode) => {
     let item = {
-      title: episode.data.title,
+      title: episode.data.index + " " + episode.data.title,
       description: marked.parse(episode.body),
       pubDate: dayjs(episode.data.pubDate).format("ddd, DD MMM YYYY hh:mm:ss ZZ"),
       link: `${astropodConfig.link}/episode/${episode.slug}/`,

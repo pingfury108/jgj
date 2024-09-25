@@ -7,7 +7,7 @@
   "banner": "/banner.webp",
   "pageSize": 15,
   "fundingUrl": "",
-  "owner": "",
+  "owner": "pingfury",
   "favicon": "/favicon.svg",
   "explicit": false,
   "cover": "/cover.jpg",

@@ -1,9 +1,10 @@
 ---
-title: 为什么学，如何学《金刚经》
-audioUrl: https://jgj-r2.pingfury.top/jin-gang-jing-01.m4a
+title: 为什么学如何学《金刚经》
+audioUrl:  https://jgj-r2.pingfury.top/jin-gang-jing-01.m4a
 pubDate: Sep 25 2024
-duration: 00:17:31
-size: 17012
+duration: 0:17:31.023000
+size: 17008
 cover: ""
+index: 1
 ---
-为什么学，如何学《金刚经》
+为什么学如何学《金刚经》

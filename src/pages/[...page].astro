@@ -13,7 +13,7 @@ const renderer = new PlainTextRenderer();
 
 export async function getStaticPaths({ paginate }) {
   const episodes = await getCollection("episode");
-  episodes.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+  episodes.sort((a, b) => a.data.index - b.data.index);
   return paginate(episodes, { pageSize: astropodConfig.pageSize });
 }
 const { page } = Astro.props;
@@ -26,7 +26,7 @@ const { page } = Astro.props;
     {
       page.data.map((episode, index) => (
         <HorizontalCard
-          title={episode.data.title}
+          title={episode.data.index + " " + episode.data.title}
           cover={episode.data.cover}
           desc={marked.parse(episode.body.slice(0, 500), { renderer: renderer })}
           url={"/episode/" + episode.slug}
