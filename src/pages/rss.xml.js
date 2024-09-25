@@ -35,7 +35,6 @@ export async function get(context) {
           "itunes:image": { $: { href: cover } },
           "itunes:summary": astropodConfig.description,
           "itunes:type": "episodic",
-          "itunes:explicit": astropodConfig.explicit,
           "itunes:owner": {
             "itunes:name": astropodConfig.owner,
             "itunes:email": astropodConfig.email,
@@ -89,14 +88,10 @@ export async function get(context) {
       pubDate: dayjs(episode.data.pubDate).format("ddd, DD MMM YYYY hh:mm:ss ZZ"),
       link: `${astropodConfig.link}/episode/${episode.slug}/`,
       guid: `${astropodConfig.link}/episode/${episode.slug}/`,
-      "itunes:episode": episode.data.episode,
-      "itunes:season": episode.data.season,
-      "itunes:episodeType": episode.data.episodeType,
-      "itunes:explicit": episode.data.explicit === undefined ? astropodConfig.explicit : episode.data.explicit,
       enclosure: {
         $: {
           url: isFullUrl(episode.data.audioUrl) ? episode.data.audioUrl : astropodConfig.link + episode.data.audioUrl,
-          length: episode.data.size && episode.data.size * 1000000,
+          length: episode.data.size && episode.data.size,
           type: "audio/mpeg",
         },
       },
