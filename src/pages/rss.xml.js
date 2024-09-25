@@ -91,7 +91,7 @@ export async function get(context) {
       enclosure: {
         $: {
           url: isFullUrl(episode.data.audioUrl) ? episode.data.audioUrl : astropodConfig.link + episode.data.audioUrl,
-          length: episode.data.size && episode.data.size,
+          length: episode.data.size && episode.data.size * 1024,
           type: "audio/mpeg",
         },
       },
