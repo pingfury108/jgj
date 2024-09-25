@@ -31,9 +31,6 @@ export default defineConfig({
       serviceEntryPoint: "@astrojs/image/sharp",
       cacheDir: "./.cache/image",
       logLevel: "debug",
-    }),
-    NetlifyCMS({
-      config: dcapConfig(),
-    }),
+    }),,
   ],
 });

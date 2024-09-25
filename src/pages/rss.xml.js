@@ -52,14 +52,7 @@ export async function get(context) {
                 rel: "self",
                 type: "application/rss+xml",
               },
-            },
-            {
-              $: {
-                href: `https://pubsubhubbub.appspot.com/`,
-                rel: "hub",
-                type: "application/rss+xml",
-              },
-            },
+            }
           ],
         },
       ],

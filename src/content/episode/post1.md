@@ -1,13 +1,13 @@
 ---
-title: Demo Episode
-audioUrl: https://ia800505.us.archive.org/15/items/astropod/1%20-%20Trailer%20with%20BG%20%28enhanced%29.ogg
-pubDate: Sep 10 2022
-duration: 00:32
-size: 0.7
+title: 为什么学，如何学《金刚经》
+audioUrl: https://jgj-r2.pingfury.top/jin-gang-jing-01.m4a
+pubDate: Sep 25 2024
+duration: 00:17:31
+size: 0.0166
 cover: ""
 explicit: false
 episode: 1
 season: 1
 episodeType: full
 ---
-This is an episode demo of Astropod. Here you can add the description of your episode.
+为什么学，如何学《金刚经》
