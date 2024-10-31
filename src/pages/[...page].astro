@@ -31,6 +31,7 @@ const { page } = Astro.props;
           desc={marked.parse(episode.body.slice(0, 500), { renderer: renderer })}
           url={"/episode/" + episode.slug}
           audioUrl={episode.data.audioUrl}
+          audioSubtitleUrl={episode.data.audioSubtitleUrl}
           pubDate={episode.data.pubDate}
           duration={episode.data.duration}
           id={"card-" + index}

@@ -1,5 +1,5 @@
 ---
-const { title, cover, desc, url, audioUrl, id, pubDate, duration } = Astro.props;
+const { title, cover, desc, url, audioUrl, audioSubtitleUrl, id, pubDate, duration } = Astro.props;
 
 import astropodConfig from "../../.astropod/astropod.config.json";
 import dayjs from "dayjs";
@@ -47,7 +47,7 @@ const displayDuration = formatTime(duration);
       </a>
     </div>
     <label class="btn btn-circle md:mx-2 swap">
-      <input type="checkbox" class="card-pay-buttons" id={id} data-audio-url={audioUrl} aria-label="Play and pause" />
+      <input type="checkbox" class="card-pay-buttons" id={id} data-audio-url={audioUrl} data-audio-subtitle-url={audioSubtitleUrl}, aria-label="Play and pause" />
       <div class="swap-off">
         <PlayIcon />
       </div>

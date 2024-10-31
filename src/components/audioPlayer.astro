@@ -10,19 +10,27 @@ import AudioMutedIcon from "./icons/audioMutedIcon.astro";
   id="audio-player-container"
   class="w-full z-20 bottom-0 fixed bg-base-100 px-5 h-16 items-center transition-opacity hidden opacity-0 duration-500"
 >
+  <div class="w-full flex flex-col">
+  <div class=w-full items-center justify-center>
+    <div class="text-center">
+    <p class="text-lg" id="audio-subtitle", data-src="">无字幕</p>
+    </div>
+  </div>
+
+  <div class="w-full flex">
   <audio src="" preload="metadata"></audio>
-  <span id="audio-loading" class="loading loading-spinner loading-md min-w-[1.5rem] hidden"></span>
-  <label id="audio-control" class="swap hidden">
+    <span id="audio-loading" class="loading loading-spinner loading-md min-w-[1.5rem] hidden"></span>
+    <label id="audio-control" class="swap hidden">
     <input type="checkbox" id="play-icon" />
     <div id="play-icon-svg" class="swap-off">
       <PlayIcon />
-    </div>
+        </div>
     <div id="pause-icon-svg" class="swap-on">
       <PauseIcon />
     </div>
   </label>
   <span id="current-time" class="ml-5 mr-2">0:00</span>/
-  <span id="duration" class="ml-2">0:00</span>
+    <span id="duration" class="ml-2">0:00</span>
   <input id="seek-slider" type="range" min="0" max="0" value="0" class="range range-xs mx-5" />
   <label class="ml-5 swap">
     <input id="mute-icon" type="checkbox" />
@@ -62,103 +70,208 @@ import AudioMutedIcon from "./icons/audioMutedIcon.astro";
       </li>
     </ul>
   </div>
+  </div>
 </div>
 
-<script>
+<script type="module">
+
   const playIconContainer = document.getElementById("play-icon");
-  const muteIconContainer = document.getElementById("mute-icon");
-  const audioControl = document.getElementById("audio-control");
-  const audioLoading = document.getElementById("audio-loading");
-  const audioDownloadLink = document.getElementById("audio-download-link");
-  const musicPlayer = document.getElementById("audio-player-container");
-  const footer = document.querySelector(".footer > div");
+const muteIconContainer = document.getElementById("mute-icon");
+const audioControl = document.getElementById("audio-control");
+const audioLoading = document.getElementById("audio-loading");
+const audioDownloadLink = document.getElementById("audio-download-link");
+const musicPlayer = document.getElementById("audio-player-container");
+const footer = document.querySelector(".footer > div");
 
-  const audio = document.querySelector("audio");
-  const durationContainer = document.getElementById("duration");
-  const currentTimeContainer = document.getElementById("current-time");
-  const seekSlider = document.getElementById("seek-slider");
+const audio = document.querySelector("audio");
+const durationContainer = document.getElementById("duration");
+const currentTimeContainer = document.getElementById("current-time");
+const seekSlider = document.getElementById("seek-slider");
 
-  const calculateTime = (secs) => {
-    const hours = Math.floor(secs / 3600);
-    const minutes = Math.floor((secs % 3600) / 60);
-    const seconds = Math.floor(secs % 60);
-    const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
-    const formattedseconds = seconds < 10 ? `0${seconds}` : seconds;
+const audioSubtitle = document.getElementById("audio-subtitle");
 
-    return hours > 0 ? `${hours}:${formattedMinutes}:${formattedseconds}` : `${minutes}:${formattedseconds}`;
-  };
+const calculateTime = (secs) => {
+  const hours = Math.floor(secs / 3600);
+  const minutes = Math.floor((secs % 3600) / 60);
+  const seconds = Math.floor(secs % 60);
+  const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
+  const formattedseconds = seconds < 10 ? `0${seconds}` : seconds;
 
-  const displayDuration = () => {
-    durationContainer.textContent = calculateTime(audio.duration);
-  };
+  return hours > 0 ? `${hours}:${formattedMinutes}:${formattedseconds}` : `${minutes}:${formattedseconds}`;
+};
 
-  if (audio.readyState > 0) {
+const displayDuration = () => {
+  durationContainer.textContent = calculateTime(audio.duration);
+};
+
+if (audio.readyState > 0) {
+  displayDuration();
+  audioLoading?.classList.add("hidden");
+  audioControl?.classList.remove("hidden");
+} else {
+  audio.addEventListener("loadedmetadata", () => {
     displayDuration();
+    seekSlider?.setAttribute("max", audio.duration);
     audioLoading?.classList.add("hidden");
     audioControl?.classList.remove("hidden");
-  } else {
-    audio.addEventListener("loadedmetadata", () => {
-      displayDuration();
-      seekSlider?.setAttribute("max", audio.duration);
-      audioLoading?.classList.add("hidden");
-      audioControl?.classList.remove("hidden");
-    });
-  }
-
-  muteIconContainer.addEventListener("click", () => {
-    audio.muted = muteIconContainer.checked;
   });
+}
 
-  playIconContainer.onchange = function () {
-    if (playIconContainer.checked) {
+muteIconContainer.addEventListener("click", () => {
+  audio.muted = muteIconContainer.checked;
+});
+
+playIconContainer.onchange = function () {
+  if (playIconContainer.checked) {
+    audio.play();
+  } else {
+    audio.pause();
+  }
+};
+
+seekSlider.addEventListener("input", () => {
+  currentTimeContainer.textContent = calculateTime(seekSlider.value);
+});
+
+seekSlider.addEventListener("change", () => {
+  audio.currentTime = seekSlider.value;
+});
+
+audio.addEventListener("timeupdate", () => {
+  seekSlider.value = Math.floor(audio.currentTime);
+  currentTimeContainer.textContent = calculateTime(seekSlider.value);
+});
+
+const playButtons = document.querySelectorAll(".card-pay-buttons");
+
+playButtons.forEach(function (btn) {
+  btn.addEventListener("click", async () => {
+    if (!audio.src.includes(btn.dataset.audioUrl)) {
+      musicPlayer?.classList.remove("hidden");
+      musicPlayer?.classList.add("flex");
+      footer?.classList.add("pb-24");
+      setTimeout(() => musicPlayer?.classList.remove("opacity-0"), 100);
+      audioLoading?.classList.remove("hidden");
+      audioControl?.classList.add("hidden");
+      durationContainer.textContent = "0:00";
+      currentTimeContainer.textContent = "0:00";
+      audio.src = btn.dataset.audioUrl;
+      if (audioSubtitle && btn.dataset.audioSubtitleUrl) {
+        audioSubtitle.setAttribute('data-src', btn.dataset.audioSubtitleUrl);
+      }
+      audioDownloadLink.href = btn.dataset.audioUrl;
+      disableOthersPlayButtons(btn.id, playButtons);
+      playIconContainer.checked = true;
+
+      const subtitle_file = audioSubtitle.getAttribute('data-src');
+      if (subtitle_file) {
+        const subtitle_text = await loadSubtitles(subtitle_file);
+        const subtitles = parseVTT(subtitle_text);
+        audio.addEventListener('timeupdate', function(event) {
+          let text = findSubtitle(subtitles, event.target.currentTime * 1000);
+          if (text) {
+            audioSubtitle.textContent = text;
+          }
+        });
+      }
+
       audio.play();
     } else {
-      audio.pause();
+      playIconContainer?.click();
     }
-  };
-
-  seekSlider.addEventListener("input", () => {
-    currentTimeContainer.textContent = calculateTime(seekSlider.value);
   });
+});
 
-  seekSlider.addEventListener("change", () => {
-    audio.currentTime = seekSlider.value;
-  });
-
-  audio.addEventListener("timeupdate", () => {
-    seekSlider.value = Math.floor(audio.currentTime);
-    currentTimeContainer.textContent = calculateTime(seekSlider.value);
-  });
-
-  const playButtons = document.querySelectorAll(".card-pay-buttons");
-
+function disableOthersPlayButtons(id, playButtons) {
   playButtons.forEach(function (btn) {
-    btn.addEventListener("click", () => {
-      if (!audio.src.includes(btn.dataset.audioUrl)) {
-        musicPlayer?.classList.remove("hidden");
-        musicPlayer?.classList.add("flex");
-        footer?.classList.add("pb-24");
-        setTimeout(() => musicPlayer?.classList.remove("opacity-0"), 100);
-        audioLoading?.classList.remove("hidden");
-        audioControl?.classList.add("hidden");
-        durationContainer.textContent = "0:00";
-        currentTimeContainer.textContent = "0:00";
-        audio.src = btn.dataset.audioUrl;
-        audioDownloadLink.href = btn.dataset.audioUrl;
-        disableOthersPlayButtons(btn.id, playButtons);
-        playIconContainer.checked = true;
-        audio.play();
-      } else {
-        playIconContainer?.click();
-      }
-    });
+    if (btn.id != id) {
+      btn.checked = false;
+    }
   });
+};
 
-  function disableOthersPlayButtons(id, playButtons) {
-    playButtons.forEach(function (btn) {
-      if (btn.id != id) {
-        btn.checked = false;
+//
+
+async function loadSubtitles(url) {
+  const response = await fetch(url);
+  const data = await response.text();
+  return data;
+};
+
+
+function parseVTT(vttContent) {
+  const lines = String(vttContent).split('\n');
+  const entries = [];
+  let currentEntry = null;
+
+  for (let line of lines) {
+    line = line.trim();
+
+    // 跳过空行和 WEBVTT 行
+    if (!line || line === 'WEBVTT') {
+      continue;
+    }
+
+    // 检查时间戳行
+    const timeMatch = line.match(/(\d{2}:\d{2}\.\d{3}) --> (\d{2}:\d{2}\.\d{3})/);
+    if (timeMatch) {
+      if (currentEntry) {
+        entries.push(currentEntry);
       }
-    });
+      currentEntry = {
+        start: timeToMilliseconds(timeMatch[1]),
+        end: timeToMilliseconds(timeMatch[2]),
+        text: ''
+      };
+      continue;
+    }
+
+    // 添加字幕文本
+    if (currentEntry) {
+      currentEntry.text += (currentEntry.text ? '\n' : '') + line;
+    }
   }
+
+  // 添加最后一个条目
+  if (currentEntry) {
+    entries.push(currentEntry);
+  }
+
+  return entries;
+}
+
+// 辅助函数：将时间戳转换为毫秒
+function timeToMilliseconds(time) {
+  const parts = time.split(':');
+  const minutes = parseInt(parts[0], 10);
+  const seconds = parseFloat(parts[1]);
+  return (minutes * 60 + seconds) * 1000;
+}
+
+
+function findSubtitle(subtitles, currentTime) {
+  for (let subtitle of Array.from(subtitles)) {
+    let startTime = parseFloat(subtitle.start);
+    let endTime = parseFloat(subtitle.end);
+
+    if (currentTime >= startTime && currentTime <= endTime) {
+      return subtitle.text;
+    }
+  }
+  return null;
+};
+
+
+const subtitle_file = audioSubtitle.getAttribute('data-src');
+if (subtitle_file) {
+  const subtitle_text = await loadSubtitles(subtitle_file);
+  const subtitles = parseVTT(subtitle_text);
+  audio.addEventListener('timeupdate', function(event) {
+    let text = findSubtitle(subtitles, event.target.currentTime * 1000);
+    if (text) {
+      audioSubtitle.textContent = text;
+    }
+  });
+}
+
 </script>
