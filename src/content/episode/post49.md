@@ -1,6 +1,7 @@
 ---
 title: 违缘是修行有所证量的表现
 audioUrl:  https://jgj-r2.pingfury.top/jin-gang-jing-49.m4a
+audioSubtitleUrl: /subtitles/jin-gang-jing-49.vtt
 pubDate: Sep 29 2024
 duration: 0:20:52.967000
 size: 20125

@@ -1,6 +1,7 @@
 ---
 title: 一切法无生
 audioUrl:  https://jgj-r2.pingfury.top/jin-gang-jing-58.m4a
+audioSubtitleUrl: /subtitles/jin-gang-jing-58.vtt
 pubDate: Sep 29 2024
 duration: 0:19:32.858000
 size: 14717

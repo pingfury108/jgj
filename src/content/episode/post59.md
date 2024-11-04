@@ -1,6 +1,7 @@
 ---
 title: 修一切善法
 audioUrl:  https://jgj-r2.pingfury.top/jin-gang-jing-59.m4a
+audioSubtitleUrl: /subtitles/jin-gang-jing-59.vtt
 pubDate: Sep 29 2024
 duration: 0:19:58.168000
 size: 16550
